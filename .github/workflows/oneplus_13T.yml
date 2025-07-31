@@ -22,7 +22,12 @@ on:
        default: false
        type: boolean
       enable_feature_p:
-       description: "是否添加iptables扩展支持"
+       description: "是否添加 iptables 扩展支持"
+       required: false
+       default: false
+       type: boolean
+      enable_feature_n:
+       description: "是否添加 nftables 支持"
        required: false
        default: false
        type: boolean
@@ -301,6 +306,36 @@ jobs:
          echo "CONFIG_IP_SET_LIST_SET=y" >> ./common/arch/arm64/configs/gki_defconfig
          echo "CONFIG_IP6_NF_NAT=y" >> ./common/arch/arm64/configs/gki_defconfig
          echo "CONFIG_IP6_NF_TARGET_MASQUERADE=y" >> ./common/arch/arm64/configs/gki_defconfig
+
+      - name: Add nftables support
+        if: ${{inputs.enable_feature_n }}
+        run: |
+         cd kernel_workspace/kernel_platform
+         echo "CONFIG_NF_TABLES=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NF_TABLES_INET=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NF_TABLES_NETDEV=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_SET=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_HASH=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_RBTREE=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_SET_RBTREE=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_SET_HASH=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_DYNAMIC_SETS=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_REJECT=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_LOG=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_LIMIT=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_CT=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_CHAIN_ROUTE_IPV4=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_CHAIN_NAT_IPV4=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_CHAIN_ROUTE_IPV6=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_CHAIN_NAT_IPV6=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_NAT=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_MASQ=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_REDIR=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_TPROXY=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_QUEUE=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_COUNTER=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_META=y" >> ./common/arch/arm64/configs/gki_defconfig
+         echo "CONFIG_NFT_FIB=y" >> ./common/arch/arm64/configs/gki_defconfig
 
       - name: Build Kernel
         run: |
